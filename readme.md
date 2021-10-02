@@ -76,7 +76,7 @@ os.Setenv("API_KEY_TEST", "valid")
 func main() {
     app := fiber.New()
 
-		app.Use(keyauth.New())
+    app.Use(keyauth.New())
 
     app.Get("/", func(c *fiber.Ctx) error {
         return c.SendString("Hello, World 👋!")
