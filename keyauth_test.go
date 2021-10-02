@@ -38,7 +38,7 @@ func TestRoute(t *testing.T) {
 	}
 
 	app := fiber.New()
-	app.Use(KeyAuth)
+	app.Use(New())
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Ahoi!")
 	})

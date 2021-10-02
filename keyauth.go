@@ -7,7 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func GetKeysInEnv() []string {
+func getKeysInEnv() []string {
 	var keys []string
 
 	for _, e := range os.Environ() {
@@ -23,7 +23,7 @@ func GetKeysInEnv() []string {
 	return keys
 }
 
-func KeyInKeys(key string, keys []string) bool {
+func keyInKeys(key string, keys []string) bool {
 	for _, k := range keys {
 		if key == k {
 			return true
@@ -33,17 +33,22 @@ func KeyInKeys(key string, keys []string) bool {
 	return false
 }
 
-func KeyAuth(c *fiber.Ctx) error {
+func keyAuth(c *fiber.Ctx) error {
 	key := c.Get("x-api-key")
 	if key == "" {
 		return fiber.NewError(fiber.StatusUnauthorized, "no api key")
 	}
 
-	keys := GetKeysInEnv()
+	keys := getKeysInEnv()
 
-	if KeyInKeys(key, keys) {
+	if keyInKeys(key, keys) {
 		return c.Next()
 	}
 
 	return fiber.NewError(fiber.StatusUnauthorized, "invalid api key")
+}
+
+// New exports a keyauth middleware handler
+func New() fiber.Handler {
+	return keyAuth
 }
