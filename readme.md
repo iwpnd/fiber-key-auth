@@ -39,7 +39,7 @@
 
 On deployment inject API keys authorized to use your service. Every call to a private
 endpoint of your service has to include a `header['x-api-key']` attribute that is
-validated against the API keys in your environment.
+validated against the API keys (starting with: `API_KEY_`) in your environment.
 If it is present, a request is authorized. If it is not fiber returns `401 Unauthorized`.
 Use this either as a middleware the usage.
 
