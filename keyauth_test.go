@@ -64,7 +64,7 @@ func TestRoute(t *testing.T) {
 	}
 }
 
-func TestRouteWithStructuredLogs(t *testing.T) {
+func TestRouteWithStructuredError(t *testing.T) {
 	os.Setenv("API_KEY_TEST", "valid")
 
 	tests := []struct {
@@ -97,7 +97,7 @@ func TestRouteWithStructuredLogs(t *testing.T) {
 	}
 
 	app := fiber.New()
-	app.Use(New(WithStructuredLog()))
+	app.Use(New(WithStructuredErrorMsg()))
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Ahoi!")
 	})

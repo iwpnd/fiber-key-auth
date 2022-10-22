@@ -14,8 +14,8 @@ type handler struct {
 // Option type
 type Option func(*handler)
 
-// WithStructuredLog
-func WithStructuredLog() Option {
+// WithStructuredError
+func WithStructuredErrorMsg() Option {
 	return func(h *handler) {
 		h.json = true
 	}
