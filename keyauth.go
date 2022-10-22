@@ -7,6 +7,20 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+type handler struct {
+	json bool
+}
+
+// Option type
+type Option func(*handler)
+
+// WithStructuredLog
+func WithStructuredLog() Option {
+	return func(h *handler) {
+		h.json = true
+	}
+}
+
 func getKeysInEnv() []string {
 	var keys []string
 
@@ -33,9 +47,14 @@ func keyInKeys(key string, keys []string) bool {
 	return false
 }
 
-func keyAuth(c *fiber.Ctx) error {
+func (h *handler) keyAuth(c *fiber.Ctx) error {
 	key := c.Get("x-api-key")
 	if key == "" {
+		if h.json {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"message": "no api key",
+			})
+		}
 		return fiber.NewError(fiber.StatusUnauthorized, "no api key")
 	}
 
@@ -45,10 +64,25 @@ func keyAuth(c *fiber.Ctx) error {
 		return c.Next()
 	}
 
+	if h.json {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"message": "invalid api key",
+		})
+	}
+
 	return fiber.NewError(fiber.StatusUnauthorized, "invalid api key")
+
 }
 
 // New exports a keyauth middleware handler
-func New() fiber.Handler {
-	return keyAuth
+func New(options ...Option) fiber.Handler {
+	h := &handler{
+		json: false,
+	}
+
+	for _, option := range options {
+		option(h)
+	}
+
+	return h.keyAuth
 }
