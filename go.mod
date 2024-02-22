@@ -3,7 +3,7 @@ module github.com/iwpnd/fiber-key-auth
 go 1.17
 
 require (
-	github.com/gofiber/fiber/v2 v2.52.0
+	github.com/gofiber/fiber/v2 v2.52.1
 	github.com/stretchr/testify v1.8.4
 )
 
