@@ -21,8 +21,8 @@ func WithStructuredErrorMsg() Option {
 	}
 }
 
-func getKeysInEnv() []string {
-	var keys []string
+func getKeysInEnv() map[string]string {
+	var keys = make(map[string]string)
 
 	for _, e := range os.Environ() {
 		pair := strings.SplitN(e, "=", 2)
@@ -30,21 +30,16 @@ func getKeysInEnv() []string {
 		value := pair[1]
 
 		if strings.HasPrefix(key, "API_KEY_") {
-			keys = append(keys, value)
+			keys[value] = key
 		}
 	}
 
 	return keys
 }
 
-func keyInKeys(key string, keys []string) bool {
-	for _, k := range keys {
-		if key == k {
-			return true
-		}
-	}
-
-	return false
+func keyInKeys(key string, keys map[string]string) bool {
+	_, ok := keys[key]
+	return ok
 }
 
 func (h *handler) keyAuth(c *fiber.Ctx) error {
