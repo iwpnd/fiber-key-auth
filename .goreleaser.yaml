@@ -14,7 +14,7 @@ before:
     - go generate ./...
 
 builds:
-  skip: true
+  - skip: true
 
 archives:
   - format: tar.gz
