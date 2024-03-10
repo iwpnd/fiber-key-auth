@@ -13,6 +13,9 @@ before:
     - go mod tidy
     - go generate ./...
 
+builds:
+  skip: true
+
 archives:
   - format: tar.gz
     # this name template makes the OS and Arch compatible with the results of `uname`.
