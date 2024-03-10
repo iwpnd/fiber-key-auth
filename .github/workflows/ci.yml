@@ -26,3 +26,26 @@ jobs:
     
     - name: test
       run: go test -v ./...
+  release:
+    if: github.event_name == 'push'
+    name: release
+    runs-on: ubuntu-latest
+    needs: ['ci']
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: setup
+        uses: actions/setup-go@v4
+      - name: release
+        uses: goreleaser/goreleaser-action@master
+        with:
+          version: latest
+          args: release --clean --config ./.goreleaser.yaml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
